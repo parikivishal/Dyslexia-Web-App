@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dyslexia-Friendly Web App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .theme-toggle {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 12px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        .form-select, .form-control {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-select:focus, .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+            border-color: #007bff;
+        }
+
+        .dark-theme {
+            background-color: #212529;
+            color: #e9ecef;
+        }
+
+        .dark-theme .container {
+            background-color: #343a40;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .dark-theme .theme-toggle {
+            background-color: #6c757d;
+        }
+
+        .dark-theme .theme-toggle:hover {
+            background-color: #5a6268;
+        }
+
+        .font-size-input {
+            width: 100px;
+        }
+
+        .font-size-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+
+        .feature-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            flex: 1;
+            min-width: 280px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .feature-card img {
+            width: 100%;
+            height: auto;
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        /* Dark theme for feature-container and feature-card */
+        .dark-theme .feature-container {
+            background-color: #343a40;
+        }
+
+        .dark-theme .feature-card {
+            background-color: #495057;
+            color: #e9ecef;
+            border-color: #6c757d;
+        }
+
+        .dark-theme .feature-card img {
+            filter: brightness(0.8);
+        }
+         .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            padding: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+
+        .logout-button i {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body class="light-theme">
+<button class="logout-button" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+    </button>
+    <div class="container">
+        <div class="header">
+            <h1>Dyslexia-Friendly Web App</h1>
+            <p>Customize the text to make it easier to read.</p>
+        </div>
+
+        <div class="feature-container">
+            <!-- Font Selector -->
+            <div class="feature-card">
+                <img src="{% static 'user-fonts.png' %}" alt="Font Icon">
+                <h3>User-friendly Fonts</h3>
+                <label for="font-select" class="form-label">Select Font:</label>
+                <select id="font-select" class="form-select">
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="OpenDyslexic">OpenDyslexic</option> <!-- Dyslexia-friendly font -->
+                </select>
+            </div>
+
+            <!-- Text-to-Speech -->
+            <div class="feature-card">
+                <img src="{% static 'text-to-speech.jpeg' %}" alt="Speech Icon">
+                <h3>Text-to-Speech</h3>
+                <p>Convert text on web pages to speech for easier comprehension.</p>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="enable-tts">
+                    <label class="form-check-label" for="enable-tts">Enable Text-to-Speech</label>
+                </div>
+            </div>
+
+            <!-- Theme Selector -->
+            <div class="feature-card">
+                <img src="{% static 'custom-design.png' %}" alt="Theme Icon">
+                <h3>Customizable Themes</h3>
+                <label for="theme-select" class="form-label">Select Color Scheme:</label>
+                <select id="theme-select" class="form-select">
+                    <option value="light">🌞 Light Theme</option>
+                    <option value="dark">🌙 Dark Theme</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+    <script>
+        const fontSelect = document.getElementById('font-select');
+        const themeSelect = document.getElementById('theme-select');
+        const themeToggleButton = document.querySelector('.theme-toggle');
+        const enableTTS = document.getElementById('enable-tts');
+
+        function updateBodyStyle() {
+            const selectedFont = fontSelect.value;
+            document.body.style.fontFamily = selectedFont;
+        }
+
+        function updateTheme() {
+            const selectedTheme = themeSelect.value;
+            if (selectedTheme === 'dark') {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                themeToggleButton.textContent = 'Switch to Light Theme';
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                themeToggleButton.textContent = 'Switch to Dark Theme';
+            }
+        }
+
+        function toggleTheme() {
+            const isDarkTheme = document.body.classList.contains('dark-theme');
+            if (isDarkTheme) {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                themeSelect.value = 'light';
+                themeToggleButton.textContent = 'Switch to Dark Theme';
+            } else {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                themeSelect.value = 'dark';
+                themeToggleButton.textContent = 'Switch to Light Theme';
+            }
+        }
+        function logout()
+        {
+            window.location.href='/';
+        }
+        function speakText() {
+            const textToSpeak = document.body.innerText;
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            speechSynthesis.speak(utterance);
+        }
+
+        fontSelect.addEventListener('change', updateBodyStyle);
+        themeSelect.addEventListener('change', updateTheme);
+        enableTTS.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                speakText();
+            } else {
+                speechSynthesis.cancel();
+            }
+        });
+
+        // Initialize with default values
+        updateBodyStyle();
+    </script>
+</body>
+</html>
